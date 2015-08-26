@@ -1,4 +1,3 @@
-#include<UTFT\UTFT.h>
 #include"Draw.h"
 
 
@@ -37,15 +36,18 @@ void Draw::drawWhichPictrue(pos x, pos y, short int width, short int height,
 		temp = convertHead; break;
 	case MAGNET:
 		temp = magnet; break;
-
+	case EMPTY:
+		temp = NULL;
+	    fillARect(x, y, x + width - 1, y + height - 1, color);
+		break;
 	default:
 		temp = NULL;
 		break;
 
 	}
-	if (!temp == NULL)
+	if (temp!=NULL)
 		drawAPicture(x, y, width, height, temp, color);
-	else fillARect(x, y, x + width - 1, y + height - 1, color);
+	
 }
 
 void Draw::drawARect(pos x0, pos y0, pos x1, pos y1, short int color)

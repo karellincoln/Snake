@@ -1,5 +1,6 @@
 #ifndef DRAW_H
 #define DRAW_H
+#include<UTFT\UTFT.h>
 #include"Define.h"
 
 class Draw
