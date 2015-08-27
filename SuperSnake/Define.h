@@ -72,14 +72,14 @@ typedef unsigned long time;
 
 //不同的游戏模式。
 
-#define HARD 1
-#define MIDDLE 2
-#define EASY 3
-#define CLASSIC 4
-#define MAGIC 5
-#define EAT_IT 6
-#define PATHS 7
-
+#define HARD 0
+#define MIDDLE 1
+#define EASY 2
+#define CLASSIC 3
+#define MAGIC 4
+#define EAT_IT 5
+#define PATHS 6
+#define GAMEMODE_NUM 7
 
 #include"Music.h"
 #include"Function.h"

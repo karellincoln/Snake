@@ -37,14 +37,70 @@ void startUI()
 short int chooseAGame()
 {
 	drawOptionUI();
-
-	return 1;
+	char *p[GAMEMODE_NUM] = { ">HARD", "MIDDL", ">EASY",
+		"EMPTY", "MAGIC", "EATIT", "PATHS" };
+	short int choice = 3;
+	drawGameName(p, choice,false);
+	return optionalGame(p,choice);
 }
 
 void drawOptionUI()
 {
 	draw.cleanScreen();
-	draw.drawWhichPictrue(32, 72, 64, 32, SNAKE_SHAPE_TWO, 0xfff0);
+	draw.drawWhichPictrue(32, 72, 64, 32, SNAKE_SHAPE_TWO,VGA_MAROON);
 	draw.drawARect(110, 72, 165, 103, VGA_GREEN);
-	
+
+}
+
+short int optionalGame(char *p[], short int choice)
+{
+	while (1)
+	{
+		if (getMessage(TO_LEFT) == TOUCHDOWN)return BACK;
+		if (getMessage(TO_RIGHT) == TOUCHDOWN)return choice;
+		if (getMessage(TO_UP) == TOUCHDOWN)
+		{
+			choice = --choice;
+			if (choice == -1)choice = 6;
+			drawGameName(p, choice,true);
+		}
+		if (getMessage(TO_DOWN) == TOUCHDOWN)
+		{
+			choice = ++choice;
+			if (choice == 7)choice = 0;
+			drawGameName(p, choice,false);
+		}
+	}
+}
+
+void drawGameName(char *p[], short int choice,bool dir)
+{
+	short int last = choice - 1;
+	short int next = choice + 1;
+	if (last == -1)last = 6;
+	if (next == 7)next = 0;
+	if (!dir)
+	{
+		myGLCD.setColor(VGA_OLIVE);
+		myGLCD.print(p[next], 120, 111);
+		delay(200);
+		myGLCD.setColor(VGA_RED);
+		myGLCD.print(p[choice], 120, 82);
+		delay(200);
+		myGLCD.setColor(VGA_OLIVE);
+		myGLCD.print(p[last], 120, 52);
+		delay(200);
+	}
+	else
+	{
+		myGLCD.setColor(VGA_OLIVE);
+		myGLCD.print(p[last], 120, 52);
+		delay(200);
+		myGLCD.setColor(VGA_RED);
+		myGLCD.print(p[choice], 120, 82);
+		delay(200);
+		myGLCD.setColor(VGA_OLIVE);
+		myGLCD.print(p[next], 120, 111);
+		delay(200);
+	}
 }

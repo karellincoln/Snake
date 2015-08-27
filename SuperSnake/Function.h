@@ -18,6 +18,8 @@ void start();
 void startUI();
 short int chooseAGame();
 void drawOptionUI();
+short int optionalGame(char *p[],short int choice);
+void drawGameName(char *p[], short int choice,bool dir);
 
 
 
