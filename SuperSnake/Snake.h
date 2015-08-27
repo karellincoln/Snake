@@ -50,21 +50,35 @@ public:
 private:
 	
 	//设置移动后，蛇的坐标更新。
-	//
+	//根据direct 的方向更新向前移动一格蛇的坐标。
 	short int inANewPointSnake(short int direct);
 
 
-
+	//绘画蛇头的并用color改变他的颜色
+	//还要将pointState的相应的点改变其属性。
 	void drawSnakeHead(short int color = VGA_RED);
+
+	//绘画蛇头后的第一个点的并用color改变他的颜色
+	//还要将pointState的相应的点改变其属性。
 	void drawFirstBody(short int color = VGA_YELLOW);
+
+	//将一个尾部的点删去并将pointState设置为EMPTY的属性
 	void erasureSnakeTail();
+
+	//根据typ设置坐标为（x，y）的点的属性。
 	void setPointAttribute(pos x,pos y,short int typ);
 	
 
-	
+	//用于存储身体每一节的坐标，
 	short int snakeBody[MAX_SNAKE_LENGTH][2];
-	short int head_type;
+	
+	//记录蛇的身体长度。
 	short int length;
+
+	//存储蛇头是哪一张图片。
+	short int head_type;
+
+	//存储蛇身体的尺寸。
 	short int body_size;
 
 };

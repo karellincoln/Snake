@@ -5,9 +5,9 @@
 
 
 
-
+//定义一些常用的类型别名。
 typedef short int pos;
-
+typedef unsigned long time;
 
 //方向键和喇叭的引脚的宏定义。
 #define MUSIC 3
@@ -48,13 +48,41 @@ typedef short int pos;
 
 
 
-//
+//蛇用的宏定义。
 #define MAX_SNAKE_LENGTH 100
 #define SMALL_SNAKE 8
 #define FAT_SNAKE 16
 
+//蛇行动时，蛇头的方向与方向键的定义数字一样。
+#define SNAKE_UP 4
+#define SNAKE_DOWN 5
+#define SNAKE_LEFT 6
+#define SNAKE_RIGHT 7
 
 
+//定义开关的状态
+#define SWITCHDOWN 1
+#define SWITCHUP 2
+#define TOUCHDOWN 1
+#define TOUCHUP 2
+
+//游戏路径。
+#define BACK 20
+#define GOIN 21
+
+//不同的游戏模式。
+
+#define HARD 1
+#define MIDDLE 2
+#define EASY 3
+#define CLASSIC 4
+#define MAGIC 5
+#define EAT_IT 6
+#define PATHS 7
+
+
+#include"Music.h"
+#include"Function.h"
 
 
 #endif

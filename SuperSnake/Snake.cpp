@@ -16,7 +16,7 @@ Snake::Snake()
 	drawFirstBody();
 }
 
-//等下要注意是有引用是否有效，
+
 short int Snake::getDirection(short int direct, bool seeWhat)
 {
 	pos x = snakeBody[0][0];

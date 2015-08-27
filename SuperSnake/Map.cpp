@@ -6,10 +6,14 @@
 //记录图中各点的状态。是蛇，食物，还是墙。
 short int pointState[22][22];
 
-
-Map::Map(short int difficulty)
+//构造地图，difficulty为地图的难度。
+//initalize为是否要对数组pointState进行赋值，默认为是。
+Map::Map(short int difficulty,bool initalize)
 {
-	initalizePointState();
+	if (initalize)
+	{
+		initalizePointState();
+	}
 	creatBolck(difficulty);
 }
 

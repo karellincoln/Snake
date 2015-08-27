@@ -81,6 +81,8 @@ void Draw::erasureSquare(pos x, pos y, short int size)
 	fillASquare(x, y, size, VGA_BLACK);
 }
 
+
+//将整个屏幕清空。
 void Draw::cleanScreen()
 {
 	myGLCD.clrScr();

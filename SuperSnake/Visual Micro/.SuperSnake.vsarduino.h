@@ -84,8 +84,11 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <Draw.h>
 #include <Food.cpp>
 #include <Food.h>
+#include <Function.h>
 #include <Map.cpp>
 #include <Map.h>
+#include <Music.h>
 #include <Snake.cpp>
 #include <Snake.h>
+#include <Start.cpp>
 #endif

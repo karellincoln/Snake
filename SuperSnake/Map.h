@@ -12,7 +12,7 @@ class Map
 public:
 
 	//构造地图，difficulty为地图的难度。
-	Map(short int difficulty);
+	Map(short int difficulty,bool initalize=true);
 
 	//void drawAMap();
 	//将一个用数组表示的地图画出来。
