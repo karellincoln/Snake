@@ -59,5 +59,8 @@
     <ClCompile Include="Start.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PartOfGame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

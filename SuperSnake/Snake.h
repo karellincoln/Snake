@@ -40,6 +40,8 @@ public:
 
 	//要显示的蛇的身体宽度。
 	void setBodySize(short int siz = SMALL_SNAKE);
+
+	//
 	
 	
 	//发现这个没有必要。

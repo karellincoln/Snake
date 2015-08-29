@@ -25,6 +25,12 @@ void drawGameName(char *p[], short int choice,bool dir);
 
 
 
+//在PartOfGame.cpp中定义的函数。
+short int differentMapMode(short int difficulty, bool isPansFinding = false,
+	bool isTurnFat = false);
+void gameUI();
+
+
 
 
 #endif

@@ -86,6 +86,7 @@
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="PartOfGame.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Start.cpp" />
   </ItemGroup>

@@ -44,7 +44,6 @@ void Food::setFoodPosition()
 void Food::setPointAttribute()
 {
 	pointState[x][y] = foodType;
-
 }
 void Food::stdSetFoodColor(short int col)
 {

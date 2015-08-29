@@ -16,16 +16,17 @@ public:
 	//fdtp是希望生成那个图片。
 	Food(short int fdTp, short int col=VGA_BLACK);
 
-	//用于随机生成一个食物的坐标。
-	void setFoodPosition();
-
-	//将图片在屏幕上画出来。
-	void drawFood();
 
 	//完成移动食物的工作。
 	void moveFood();
 
 private:
+
+	//用于随机生成一个食物的坐标。
+	void setFoodPosition();
+
+	//将图片在屏幕上画出来。
+	void drawFood();
 
 	//将生成食物的点后，将该点赋值为其相应的类型。
 	void setPointAttribute();

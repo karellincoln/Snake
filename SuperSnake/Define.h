@@ -24,9 +24,9 @@ typedef unsigned long time;
 #define CROSS_WALL 1
 #define CONVERT_HEAD 2
 #define MAGNET 3
-#define SNAKE_SHAPE_ONE 4
-#define SNAKE_SHAPE_TWO 5
-#define SNAKE_SHAPE_THREE 6
+#define FAT_BODY 4
+#define SNAKE_SHAPE_ONE 5
+#define SNAKE_SHAPE_TWO 6
 #define S_OF_SNAKE 7
 #define N_OF_SNAKE 8
 #define A_OF_SNAKE 9
@@ -52,6 +52,9 @@ typedef unsigned long time;
 #define MAX_SNAKE_LENGTH 100
 #define SMALL_SNAKE 8
 #define FAT_SNAKE 16
+
+#define SNAKE_DIE 0
+#define SNAKE_ALIVE 1
 
 //蛇行动时，蛇头的方向与方向键的定义数字一样。
 #define SNAKE_UP 4
@@ -80,6 +83,11 @@ typedef unsigned long time;
 #define EAT_IT 5
 #define PATHS 6
 #define GAMEMODE_NUM 7
+
+//游戏的速度的宏定义
+#define START_SPEED 150
+#define CUTOFF_SPEED 10  
+#define FAST_SPEED  40
 
 #include"Music.h"
 #include"Function.h"

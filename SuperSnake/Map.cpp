@@ -30,6 +30,37 @@ Map::Map(short int a[],short int length)
 	}
 }
 
+
+void Map::creatBolck(short int num)
+{
+	pos x, y;
+	for (short int i = 0; i < num; i++)
+	{
+		do{
+			x = random(1, 21);
+			y = random(2, 21);
+		} while (!IsASuitablePoint(x, y));
+		pointState[x][y] = WALL_AND_BLOCK;
+		drawBlock(x, y);
+
+	}
+
+}
+
+void Map::destroyBlock()
+{
+	
+	for (pos i = 1; i < 21; i++)
+	{
+		for (pos j = 1; j < 21; j++)
+		{
+			if (pointState[i][j] == WALL_AND_BLOCK)
+				cleanBlock(i,j);
+		}
+	}
+}
+
+
 //void Map::drawAMap()
 //{
 //	drawWall();
@@ -40,6 +71,12 @@ void Map::drawBlock(pos x, pos y)
 {
 	draw.fillASquare(x * 8, y * 8, 8);
 }
+void Map::cleanBlock(pos x, pos y)
+{
+	draw.fillASquare(x * 8, y * 8, 8, VGA_BLACK);
+	pointState[x][y] == EMPTY;
+}
+
 
 void Map::initalizePointState()
 {
@@ -56,21 +93,7 @@ void Map::initalizePointState()
 		}
 	}
 }
-void Map::creatBolck(short int num)
-{
-	pos x, y;
-	for (short int i = 0; i < num; i++)
-	{
-		do{
-			x = random(1, 21);
-			y = random(2, 21);
-		} while (!IsASuitablePoint(x, y));
-		pointState[x][y] = WALL_AND_BLOCK;
-		drawBlock(x, y);
 
-	}
-	
-}
 
 bool Map::IsASuitablePoint(pos x, pos y)
 {
@@ -85,7 +108,7 @@ bool Map::IsASuitablePoint(pos x, pos y)
 			{
 				if ((i == x - 2 && i >= 0) || (i == x + 2 && i <= 21) ||
 					(j == y - 2 && j >= 0) || (j == y + 2 && j <= 21)){
-					if (pointState[i][j] != EMPTY)return 0;
+					if (pointState[i][j] != EMPTY)return 0;//条件可以改成pointState[i][j]==WALL_AND_BLOCK.
 				}
 			}
 		}

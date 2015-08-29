@@ -5,7 +5,7 @@
 
 
 //声明一个外部的字体数组和屏幕的对象
-extern uint8_t SmallFont[];
+extern uint8_t BigFont[];
 UTFT myGLCD(QD220A, A2, A1, A5, A4, A3);
 
 
@@ -36,7 +36,7 @@ void setup()
 	//初始化屏幕和设置字体。
 	myGLCD.InitLCD();
 	myGLCD.InitLCD();
-	myGLCD.setFont(SmallFont);
+	myGLCD.setFont(BigFont);
 
 
   /* add setup code here */

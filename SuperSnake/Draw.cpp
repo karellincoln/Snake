@@ -28,6 +28,8 @@ void Draw::drawWhichPictrue(pos x, pos y, short int width, short int height,
 	case SNAKE_SHAPE_TWO:
 		temp = snake2; break;
 
+
+	case FAT_BODY:
 	case APPLE:
 		temp = apple; break;
 	case CROSS_WALL:

@@ -88,6 +88,7 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <Map.cpp>
 #include <Map.h>
 #include <Music.h>
+#include <PartOfGame.cpp>
 #include <Snake.cpp>
 #include <Snake.h>
 #include <Start.cpp>
