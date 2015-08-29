@@ -19,7 +19,7 @@ public:
 	short int为返回要移动去的点的坐标属性。
 	*/
 	short int getDirection(short int direct, bool seeWhat = false);
-
+	short int isCloseWithFood();
 	//完成将蛇移动的任务。
 	void moveSnake(short int direct,short int headColor = VGA_RED,short int bodyColor = VGA_YELLOW);     
 	
@@ -41,7 +41,8 @@ public:
 	//要显示的蛇的身体宽度。
 	void setBodySize(short int siz = SMALL_SNAKE);
 
-	//
+	void convertBody();
+	short int getTailDirection();
 	
 	
 	//发现这个没有必要。

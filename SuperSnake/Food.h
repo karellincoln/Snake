@@ -20,6 +20,7 @@ public:
 	//完成移动食物的工作。
 	void moveFood();
 
+	void creatANewFood();
 private:
 
 	//用于随机生成一个食物的坐标。

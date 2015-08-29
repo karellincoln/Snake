@@ -79,6 +79,28 @@ short int Snake::getDirection(short int direct, bool seeWhat)
 
 }
 
+short int Snake::isCloseWithFood()
+{
+	pos x = snakeBody[0][0];
+	pos y = snakeBody[0][1];
+	for (pos i = x - 2; i <= x + 2; i++)
+	{
+		for (pos j = y - 2; j <= y + 2; j++)
+		{
+			if (i > 0 && i< 21 && j>0 && j<21){
+				if (pointState[i][j] != EMPTY&&pointState[i][j] <= FAT_BODY)
+				{
+					draw.erasureSquare(i * 8, j * 8, 8);
+					short int state = pointState[i][j];
+					pointState[i][j] = EMPTY;
+					return state;
+				}
+			}
+		}
+	}
+	return EMPTY;
+}
+
 void Snake::moveSnake(short int direct, short int headColor, short int bodyColor)
 {
 	erasureSnakeTail();
@@ -163,6 +185,36 @@ void Snake::setBodySize(short int siz)
 {
 	body_size = siz;
 }
+
+void Snake::convertBody()
+{
+	for (short int i = 0; i < length / 2; ++i)
+	{
+		short int temp;
+		temp = snakeBody[i][0];
+		snakeBody[i][0] = snakeBody[length - i - 1][0];
+		snakeBody[length - i - 1][0] = temp;
+		temp = snakeBody[i][1];
+		snakeBody[i][1] = snakeBody[length - i - 1][1];
+		snakeBody[length - i - 1][1] = temp;
+	}
+}
+
+short int Snake::getTailDirection()
+{
+	if (snakeBody[length - 1][0] == snakeBody[length - 2][0]){
+		if (snakeBody[length - 1][1]>snakeBody[length - 2][1])
+			return SNAKE_DOWN;
+		else return SNAKE_UP;
+	}
+	else {
+		if (snakeBody[length - 1][0]>snakeBody[length - 2][0])
+			return SNAKE_RIGHT;
+		else return SNAKE_LEFT;
+	}
+}
+
+
 
 void Snake::eatBlock()
 {

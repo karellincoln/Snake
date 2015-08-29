@@ -8,8 +8,11 @@
 extern UTFT myGLCD;
 extern uint8_t SmallFont[];
 
-short int differentMapMode(short int difficulty,bool isPansFinding=false,
-		bool isTurnFat=false)
+short int fatCount = 0;
+
+
+short int differentMapMode(short int difficulty,bool isPansFinding,
+		bool isTurnFat)
 {
 	draw.cleanScreen();
 
@@ -40,22 +43,34 @@ short int differentMapMode(short int difficulty,bool isPansFinding=false,
 
 		
 		if (isTurnFat == true)//是否要变胖。
-			foodType = random(1, 5);
+			foodType = random(1, 6);
 		else foodType = random(1, 4);
 		creatASpecialFood(creatFoodTime, foodType);//完成产生一个特殊的食物。
 		
 		if (isPansFinding == true)//是否是闯关模式。
 		{
-
+			if (score / 15 == 0)
+			{
+				map.destroyBlock();
+				difficulty += 8;
+				map.creatBolck(difficulty);
+			}
+		}
+		if (score == 90)
+		{
+			return killTheGame(score,startTime,scale);/////////////////////////
 		}
 		
 		if (afterTime(snakeTime, speed))//是否到蛇移动的时间。
 		{
 			headTouch = snk.getDirection(direct, true);
+			soundOfTouchAndEat(headTouch);
 			switch (headTouch)
 			{
+			case SNAKE_BODY:
 			case WALL_AND_BLOCK:
-				return touchWithBlock(snakeState);
+				printScore(score, startTime, scale);
+				return touchWithBlock(snakeState);//////////////////
 				break;
 			case EMPTY:
 				snk.moveSnake(direct);
@@ -64,17 +79,26 @@ short int differentMapMode(short int difficulty,bool isPansFinding=false,
 				touchWithApple(snk, direct, score, scale, speed);
 				break;
 			case CROSS_WALL:
-				
-				
+				snk.setHeadType(CROSS_WALL);
+				snk.moveSnake(direct);
+				touchWithCrossWall(snk, direct, score, scale, speed, snakeTime);
 				break;
 			case CONVERT_HEAD:
-
-
+				snk.moveSnake(direct);
+				direct = snk.getTailDirection();
+				snk.convertBody();
 				break;
 			case MAGNET:
-
+				snk.setHeadType(MAGNET);
+				snk.moveSnake(direct);
+				touchWithMagnet(snk, direct, score, scale, speed, snakeTime);
 				break;
 			case FAT_BODY:
+				++fatCount;
+				if (fatCount%2==1)
+					snk.setBodySize(FAT_SNAKE);
+				else snk.setBodySize(SMALL_SNAKE);
+				snk.moveSnake(direct);
 
 				break;
 			default:
@@ -86,6 +110,7 @@ short int differentMapMode(short int difficulty,bool isPansFinding=false,
 	}
 
 }
+
 
 
 void gameUI()
@@ -103,6 +128,9 @@ void gameUI()
 
 }
 
+
+
+
 short int touchWithBlock(bool &snkState)
 {
 	snkState = SNAKE_DIE;
@@ -112,77 +140,201 @@ short int touchWithBlock(bool &snkState)
 	myGLCD.print("CONTINUE OR NOT?", 26, 96);
 	return songOfDie();
 }
+
+
+short int killTheGame(short int score, time startTime, short int scale)
+{
+	draw.erasureRect(10, 80, 160, 112);
+	myGLCD.setColor(VGA_FUCHSIA);
+	myGLCD.print("GREAT!", 80, 80);
+	printScore(score, startTime, scale);
+	while (1){
+		if (getMessage(TO_RIGHT) == SWITCHDOWN)
+			return GOIN;
+		if (getMessage(TO_LEFT) == SWITCHDOWN)
+			return BACK;
+	}
+}
+
+
+
 void touchWithApple(Snake &snk, const short int direct,
 	short int &score, short int &scale, short int &speed) 
 {
 	snk.addLengthAndMove(direct);
+	Food food(APPLE);
 	++score;
-	if (score % 10 == 0)
+	if (score % 5 == 0)
 	{
 		++scale;
 		speed -= scale*CUTOFF_SPEED;
 	}
+	myGLCD.setColor(VGA_FUCHSIA);
+	myGLCD.printNumI(score, 176, 40);
+	myGLCD.printNumI(scale, 176, 152);
 }
-short int touchwithCrossWall(Snake &snk,short int direct,short int &score,
-	short int &scale,short int &speed,short int &startTime,
-	bool &isTurnFat,bool &isPansFinding)
+
+
+
+void  touchWithCrossWall(Snake &snk,short int &direct,short int &score,
+	short int &scale,short int &speed, time &snakeTime)
 {
 	short int foodType;
 	short int headTouch;
-	time snakeTime = millis();
 	time creatFoodTime = millis();
+	
+	bool eatOthers = false;
+	const time statim = millis();
+	bool getInBlock = false;
 
-	while (1)
+	while (millis()-statim<15000)
 	{
 
 		if (afterTime(snakeTime, speed))//是否到蛇移动的时间。
 		{
 			headTouch = snk.getDirection(direct, true);
+			soundOfTouchAndEat(headTouch);
 			switch (headTouch)
 			{
+			case SNAKE_BODY:
 			case WALL_AND_BLOCK:
-				
+				snk.crossAllBlock(direct);
+				getInBlock = true;
 				break;
 			case EMPTY:
-				snk.moveSnake(direct);
+				if (getInBlock)
+				{
+					snk.onlyMoveHead(direct);
+					getInBlock = false;
+				}
+				else
+					snk.moveSnake(direct);
 				break;
 			case APPLE:
 				touchWithApple(snk, direct, score, scale, speed);
 				break;
 			case CROSS_WALL:
-
+				eatOthers = true;
 				break;
 			case CONVERT_HEAD:
-
+				snk.moveSnake(direct);
+				direct = snk.getTailDirection();
+				snk.convertBody();
 
 				break;
 			case MAGNET:
-
+				eatOthers = true;
 				break;
 			case FAT_BODY:
-
+				++fatCount;
+				if (fatCount % 2 == 1){
+					snk.setBodySize(FAT_SNAKE);
+					speed *= 2;
+				}
+				else {
+					snk.setBodySize(SMALL_SNAKE);
+					speed /= 2;
+				}
+				snk.moveSnake(direct);
 				break;
 			default:
 				break;
 			}
 
 		}
-
+		if (eatOthers)break;
+		
 		direct = getSnakeDirect(direct);
-		if (isTurnFat == true)//是否要变胖。
-			foodType = random(1, 5);
-		else foodType = random(1, 4);
+		
+		foodType = random(1, 4);
 		creatASpecialFood(creatFoodTime, foodType);//完成产生一个特殊的食物。
 
-		if (isPansFinding == true)//是否是闯关模式。
+		if (score == 90)
 		{
-
+			break;
 		}
 
 	}
+	snk.setHeadType(EMPTY);
 }
 
+void  touchWithMagnet(Snake &snk, short int &direct, short int &score,
+	short int &scale, short int &speed, time &snakeTime)
+{
+	short int foodType;
+	short int headTouch;
+	time creatFoodTime = millis();
 
+	bool eatOthers = false;
+	const time statim = millis();
+
+
+	while (millis() - statim<15000)
+	{
+
+		if (afterTime(snakeTime, speed))//是否到蛇移动的时间。
+		{
+			headTouch = snk.getDirection(direct, true);
+			soundOfTouchAndEat(headTouch);
+			switch (headTouch)
+			{
+			case SNAKE_BODY:
+			case WALL_AND_BLOCK:
+				eatOthers = true;
+				break;
+			case EMPTY:
+				snk.moveSnake(direct);
+				headTouch = snk.isCloseWithFood();
+				soundOfTouchAndEat(headTouch);
+				break;
+			default:
+				break;
+			}
+			if (eatOthers == true)break;
+			switch (headTouch)
+			{
+			case APPLE:
+				touchWithApple(snk, direct, score, scale, speed);
+				break;
+			case CROSS_WALL:
+				eatOthers = true;
+				break;
+			case CONVERT_HEAD:
+				direct = snk.getTailDirection();
+				snk.convertBody();
+
+				break;
+			case MAGNET:
+				eatOthers = true;
+				break;
+			case FAT_BODY:
+				++fatCount;
+				if (fatCount % 2 == 1)
+					snk.setBodySize(FAT_SNAKE);
+				else snk.setBodySize(SMALL_SNAKE);
+				snk.moveSnake(direct);
+				break;
+			default:
+				break;
+			}
+
+
+		}
+		if (eatOthers)break;
+
+		direct = getSnakeDirect(direct);
+
+		foodType = random(1, 4);
+		creatASpecialFood(creatFoodTime, foodType);//完成产生一个特殊的食物。
+
+		if (score == 90)
+		{
+			break;
+		}
+
+	}
+	snk.setHeadType(EMPTY);
+}
 
 
 void printScore(short int score, time tim, short int scal)
@@ -192,6 +344,7 @@ void printScore(short int score, time tim, short int scal)
 	myGLCD.printNumI((millis() - tim) / 1000, 176, 96);
 	myGLCD.printNumI(scal, 176, 152);
 }
+
 
 
 //从键盘中获取方向，蛇应该往哪个方向走。
@@ -206,6 +359,8 @@ short int getKeyboardDirect()
 	if (getMessage(TO_DOWN) == TOUCHDOWN)
 		return SNAKE_DOWN;
 }
+
+
 
 short int getSnakeDirect(short int dir)
 {
@@ -236,9 +391,11 @@ short int getSnakeDirect(short int dir)
 	return dir;
 }
 
+
 void creatASpecialFood(time &foodTime,short int foodType)
 {
 	time betw = random(10,30) * 1000;
+	if (foodType >= 4)foodType = 4;
 	if (afterTime(foodTime, betw))
 	{
 		Food food(foodType);

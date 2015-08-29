@@ -26,11 +26,28 @@ void drawGameName(char *p[], short int choice,bool dir);
 
 
 //在PartOfGame.cpp中定义的函数。
+class Snake;
+
 short int differentMapMode(short int difficulty, bool isPansFinding = false,
 	bool isTurnFat = false);
 void gameUI();
 
+short int touchWithBlock(bool &snkState);
+short int killTheGame(short int score, time startTime, short int scale);
 
+void touchWithApple(Snake &snk, const short int direct,
+	short int &score, short int &scale, short int &speed);
+
+void  touchWithCrossWall(Snake &snk, short int &direct, short int &score,
+	short int &scale, short int &speed, time &snakeTime);
+
+void  touchWithMagnet(Snake &snk, short int &direct, short int &score,
+	short int &scale, short int &speed, time &snakeTime);
+
+void printScore(short int score, time tim, short int scal);
+short int getKeyboardDirect();
+short int getSnakeDirect(short int dir);
+void creatASpecialFood(time &foodTime, short int foodType);
 
 
 #endif

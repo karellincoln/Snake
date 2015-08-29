@@ -86,7 +86,7 @@ typedef unsigned long time;
 
 //游戏的速度的宏定义
 #define START_SPEED 150
-#define CUTOFF_SPEED 10  
+#define CUTOFF_SPEED 6  
 #define FAST_SPEED  40
 
 #include"Music.h"

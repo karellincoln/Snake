@@ -29,6 +29,13 @@ void Food::moveFood()
 }
 
 
+void Food::creatANewFood()
+{
+	setFoodPosition();
+	setPointAttribute();
+	drawFood();
+}
+
 void Food::setFoodPosition()
 {
 	pos i, j;
@@ -55,7 +62,7 @@ void Food::stdSetFoodColor(short int col)
 			color = VGA_RED;
 			break;
 		case CROSS_WALL:
-			color = VGA_MAROON;
+			color = VGA_AQUA;
 			break;
 		case CONVERT_HEAD:
 			color = VGA_BLUE;
@@ -64,7 +71,7 @@ void Food::stdSetFoodColor(short int col)
 			color = VGA_FUCHSIA;
 			break;
 		default:
-			color = VGA_GREEN;
+			color = VGA_LIME;
 			break;
 		}
 	}

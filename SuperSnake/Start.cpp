@@ -3,15 +3,15 @@
 
 
 extern UTFT myGLCD;
-
+extern uint8_t BigFont[];
 
 //游戏由此进入。
 void start()
 {
 	startUI();
-	chooseAGame();
-	differentMapMode(20);
-	delay(5000);
+	while (chooseAGame() != BACK){};
+	
+	
 }
 
 
@@ -33,6 +33,7 @@ void startUI()
 }
 
 
+
 short int chooseAGame()
 {
 	drawOptionUI();
@@ -40,8 +41,40 @@ short int chooseAGame()
 		"EMPTY", "MAGIC", "EATIT", "PATHS" };
 	short int choice = 3;
 	drawGameName(p, choice,false);
-	return optionalGame(p,choice);
+	short int game=optionalGame(p,choice);
+	if (game == BACK)return BACK;
+	while (1)
+	{
+		short int isContinue = GOIN;
+		switch (game)
+		{
+		case HARD:
+			isContinue = differentMapMode(30);
+			break;
+		case MIDDLE:
+			isContinue = differentMapMode(20);
+			break;
+		case EASY:
+			isContinue = differentMapMode(10);
+			break;
+		case CLASSIC:
+			isContinue = differentMapMode(0);
+			break;
+		case MAGIC:
+			isContinue = differentMapMode(2, false, true);
+			break;
+		case EAT_IT:
+			break;
+		case PATHS:
+			isContinue = differentMapMode(0, true, false);
+			break;
+		default:
+			break;
+		}
+		if (isContinue == BACK)break;
+	}
 }
+
 
 void drawOptionUI()
 {
@@ -50,6 +83,7 @@ void drawOptionUI()
 	draw.drawARect(110, 72, 210, 103, VGA_GREEN);
 
 }
+
 
 short int optionalGame(char *p[], short int choice)
 {
@@ -72,12 +106,14 @@ short int optionalGame(char *p[], short int choice)
 	}
 }
 
+
 void drawGameName(char *p[], short int choice,bool dir)
 {
 	short int last = choice - 1;
 	short int next = choice + 1;
 	if (last == -1)last = 6;
 	if (next == 7)next = 0;
+	myGLCD.setFont(BigFont);
 	if (!dir)
 	{
 		myGLCD.setColor(VGA_OLIVE);
@@ -103,3 +139,5 @@ void drawGameName(char *p[], short int choice,bool dir)
 		delay(200);
 	}
 }
+
+
