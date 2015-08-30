@@ -88,6 +88,7 @@ typedef unsigned long time;
 #define START_SPEED 150
 #define CUTOFF_SPEED 6  
 #define FAST_SPEED  40
+#define FOOD_TRUN_BLOCK 6000
 
 #include"Music.h"
 #include"Function.h"

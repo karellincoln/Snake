@@ -64,6 +64,7 @@ short int chooseAGame()
 			isContinue = differentMapMode(2, false, true);
 			break;
 		case EAT_IT:
+			isContinue = differentMapMode(0, false, false, true);
 			break;
 		case PATHS:
 			isContinue = differentMapMode(0, true, false);

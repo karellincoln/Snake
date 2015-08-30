@@ -36,6 +36,12 @@ void Food::creatANewFood()
 	drawFood();
 }
 
+void Food::becomeABlock()
+{
+	pointState[x][y] = WALL_AND_BLOCK;
+	draw.fillASquare(x * 8, y * 8, 8);
+}
+
 void Food::setFoodPosition()
 {
 	pos i, j;

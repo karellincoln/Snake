@@ -9,10 +9,11 @@ extern UTFT myGLCD;
 extern uint8_t SmallFont[];
 
 short int fatCount = 0;
+short int foodCount = 0;
 
 
 short int differentMapMode(short int difficulty,bool isPansFinding,
-		bool isTurnFat)
+		bool isTurnFat,bool isEatIt)
 {
 	draw.cleanScreen();
 
@@ -29,9 +30,12 @@ short int differentMapMode(short int difficulty,bool isPansFinding,
 
 	short int scale = 0;
 	short int score = 0;
+	short int compare = 0;
 
 	time snakeTime = millis();
 	time creatFoodTime = millis();
+	time foodTime = millis();
+
 	const time startTime = millis();
 
 	short int speed=START_SPEED;
@@ -49,13 +53,15 @@ short int differentMapMode(short int difficulty,bool isPansFinding,
 		
 		if (isPansFinding == true)//是否是闯关模式。
 		{
-			if (score / 15 == 0)
+			if (compare!=score&&score%8==0)
 			{
+				compare = score;
 				map.destroyBlock();
-				difficulty += 8;
+				difficulty += 5;
 				map.creatBolck(difficulty);
 			}
 		}
+
 		if (score == 90)
 		{
 			return killTheGame(score,startTime,scale);/////////////////////////
@@ -63,6 +69,18 @@ short int differentMapMode(short int difficulty,bool isPansFinding,
 		
 		if (afterTime(snakeTime, speed))//是否到蛇移动的时间。
 		{
+			if (isEatIt)
+			{
+				if (++foodCount % 2 == 0)
+				{
+					fd.moveFood();
+					if (afterTime(foodTime, FOOD_TRUN_BLOCK))
+					{
+						fd.becomeABlock();
+						fd.creatANewFood();
+					}
+				}
+			}
 			headTouch = snk.getDirection(direct, true);
 			soundOfTouchAndEat(headTouch);
 			switch (headTouch)
@@ -76,12 +94,12 @@ short int differentMapMode(short int difficulty,bool isPansFinding,
 				snk.moveSnake(direct);
 				break;
 			case APPLE:
-				touchWithApple(snk, direct, score, scale, speed);
+				touchWithApple(snk, fd, foodTime, direct, score, scale, speed);
 				break;
 			case CROSS_WALL:
 				snk.setHeadType(CROSS_WALL);
 				snk.moveSnake(direct);
-				touchWithCrossWall(snk, direct, score, scale, speed, snakeTime);
+				touchWithCrossWall(snk,fd, direct, score, scale, speed, snakeTime,isEatIt);
 				break;
 			case CONVERT_HEAD:
 				snk.moveSnake(direct);
@@ -91,7 +109,7 @@ short int differentMapMode(short int difficulty,bool isPansFinding,
 			case MAGNET:
 				snk.setHeadType(MAGNET);
 				snk.moveSnake(direct);
-				touchWithMagnet(snk, direct, score, scale, speed, snakeTime);
+				touchWithMagnet(snk,fd, direct, score, scale, speed, snakeTime,isEatIt);
 				break;
 			case FAT_BODY:
 				++fatCount;
@@ -158,11 +176,12 @@ short int killTheGame(short int score, time startTime, short int scale)
 
 
 
-void touchWithApple(Snake &snk, const short int direct,
+void touchWithApple(Snake &snk,Food &fd, time &foodTime, const short int direct,
 	short int &score, short int &scale, short int &speed) 
 {
 	snk.addLengthAndMove(direct);
-	Food food(APPLE);
+	fd.creatANewFood();
+	foodTime = millis();
 	++score;
 	if (score % 5 == 0)
 	{
@@ -176,11 +195,13 @@ void touchWithApple(Snake &snk, const short int direct,
 
 
 
-void  touchWithCrossWall(Snake &snk,short int &direct,short int &score,
-	short int &scale,short int &speed, time &snakeTime)
+void  touchWithCrossWall(Snake &snk, Food &fd, short int &direct,short int &score,
+	short int &scale,short int &speed, time &snakeTime, bool isEatIt)
 {
 	short int foodType;
 	short int headTouch;
+
+	time foodTime = millis();
 	time creatFoodTime = millis();
 	
 	bool eatOthers = false;
@@ -211,7 +232,7 @@ void  touchWithCrossWall(Snake &snk,short int &direct,short int &score,
 					snk.moveSnake(direct);
 				break;
 			case APPLE:
-				touchWithApple(snk, direct, score, scale, speed);
+				touchWithApple(snk, fd, foodTime, direct, score, scale, speed);
 				break;
 			case CROSS_WALL:
 				eatOthers = true;
@@ -254,15 +275,29 @@ void  touchWithCrossWall(Snake &snk,short int &direct,short int &score,
 			break;
 		}
 
+		if (isEatIt)
+		{
+			if (++foodCount % 2 == 0)
+			{
+				fd.moveFood();
+				if (afterTime(foodTime, FOOD_TRUN_BLOCK))
+				{
+					fd.becomeABlock();
+					fd.creatANewFood();
+				}
+			}
+		}
+
 	}
 	snk.setHeadType(EMPTY);
 }
 
-void  touchWithMagnet(Snake &snk, short int &direct, short int &score,
-	short int &scale, short int &speed, time &snakeTime)
+void  touchWithMagnet(Snake &snk, Food &fd, short int &direct, short int &score,
+	short int &scale, short int &speed, time &snakeTime,bool isEatIt)
 {
 	short int foodType;
 	short int headTouch;
+	time foodTime = millis();
 	time creatFoodTime = millis();
 
 	bool eatOthers = false;
@@ -294,7 +329,7 @@ void  touchWithMagnet(Snake &snk, short int &direct, short int &score,
 			switch (headTouch)
 			{
 			case APPLE:
-				touchWithApple(snk, direct, score, scale, speed);
+				touchWithApple(snk, fd, foodTime, direct, score, scale, speed);
 				break;
 			case CROSS_WALL:
 				eatOthers = true;
@@ -330,6 +365,19 @@ void  touchWithMagnet(Snake &snk, short int &direct, short int &score,
 		if (score == 90)
 		{
 			break;
+		}
+
+		if (isEatIt)
+		{
+			if (++foodCount % 2 == 0)
+			{
+				fd.moveFood();
+				if (afterTime(foodTime, FOOD_TRUN_BLOCK))
+				{
+					fd.becomeABlock();
+					fd.creatANewFood();
+				}
+			}
 		}
 
 	}

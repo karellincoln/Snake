@@ -21,6 +21,7 @@ public:
 	void moveFood();
 
 	void creatANewFood();
+	void becomeABlock();
 private:
 
 	//用于随机生成一个食物的坐标。
