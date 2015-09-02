@@ -449,3 +449,6 @@ void creatASpecialFood(time &foodTime,short int foodType)
 		Food food(foodType);
 	}
 }
+
+
+kfjsdiofjoiejfoewjf fd fjeiofje wdfjiwejfj ejfioefjeio;//jeoifje减肥哦飞机飞机飞哦加哦我就
